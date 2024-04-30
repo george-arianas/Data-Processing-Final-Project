@@ -5,13 +5,21 @@ import java.io.{File, PrintWriter}
 
 object greedy_alg2 {
   def main(args: Array[String]): Unit = {
-    val filename = "C:\\Users\\Peter\\OneDrive\\Documents\\Data-Processing-Final-Project\\data\\soc-pokec-relationships.csv"
-    val outputFilename = "C:\\Users\\Peter\\OneDrive\\Documents\\Data-Processing-Final-Project\\output\\soc-pokec-relationships_matching.csv"
+    val filename = "C:\\Users\\Peter\\OneDrive\\Documents\\Data-Processing-Final-Project\\data\\soc-LiveJournal1.csv"
+    val outputFilename = "C:\\Users\\Peter\\OneDrive\\Documents\\Data-Processing-Final-Project\\output\\soc-LiveJournal1_matching.csv"
     val graph = loadGraphFromFile(filename)
+
+    // Start time
+    val startTime = System.nanoTime()
+
     val matching = findMaximalMatching(graph)
-    //println("Maximal Matching:")
-    //matching.foreach(println)
-    println("Saving Matching to csv:")
+
+    // End time and calculate duration
+    val endTime = System.nanoTime()
+    val duration = (endTime - startTime) / 1e9d // Convert to seconds
+    println(s"Algorithm runtime: $duration seconds")
+
+    println("Saving Matching to csv")
     saveMatchingToFile(matching, outputFilename)
   }
 
