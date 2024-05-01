@@ -1,1 +1,153 @@
+import scala.collection.mutable.ArrayBuffer
+import scala.io.Source
+import java.io.PrintWriter
+
+object EdmondsBlossom {
+
+  def lca(matchArr: Array[Int], base: Array[Int], p: Array[Int], a: Int, b: Int): Int = {
+    val used = Array.fill(matchArr.length)(false)
+    var tempA = a
+    while (true) {
+      tempA = base(tempA)
+      used(tempA) = true
+      if (matchArr(tempA) == -1) return tempA
+      tempA = p(matchArr(tempA))
+    }
+    var tempB = b
+    while (true) {
+      tempB = base(tempB)
+      if (used(tempB)) return tempB
+      tempB = p(matchArr(tempB))
+    }
+    -1 // should never reach here
+  }
+
+  def markPath(matchArr: Array[Int], base: Array[Int], blossom: Array[Boolean], p: Array[Int], v: Int, b: Int, children: Int): Unit = {
+    var tempV = v
+    var tempChildren = children
+    while (base(tempV) != b) {
+      blossom(base(tempV)) = true
+      blossom(base(matchArr(tempV))) = true
+      p(tempV) = tempChildren
+      tempChildren = matchArr(tempV)
+      tempV = p(matchArr(tempV))
+    }
+  }
+
+  def findPath(graph: Array[ArrayBuffer[Int]], matchArr: Array[Int], p: Array[Int], root: Int): Int = {
+  val n = graph.length
+  val used = Array.fill(n)(false)
+  val base = Array.tabulate(n)(identity)
+
+  used(root) = true
+  var qh = 0
+  var qt = 0
+  val q = new ArrayBuffer[Int]()
+
+  q += root
+
+  while (qh < qt) {
+    val v = q(qh)
+    qh += 1
+    for (to <- graph(v)) {
+      if (base(v) == base(to) || matchArr(v) == to) // continue
+      if (to == root || matchArr(to) != -1 && p(matchArr(to)) != -1) {
+        // blossom contraction step
+        val curbase = lca(matchArr, base, p, v, to)
+        val blossom = Array.fill(n)(false)
+        markPath(matchArr, base, blossom, p, v, curbase, to)
+        markPath(matchArr, base, blossom, p, to, curbase, v)
+        for (i <- 0 until n) {
+          // part of blossom
+          if (blossom(base(i))) {
+            base(i) = curbase
+            if (!used(i)) {
+              used(i) = true
+              q += i
+              qt += 1
+            }
+          }
+        }
+      } else if (p(to) == -1) {
+        p(to) = v
+        if (matchArr(to) == -1) return to
+        val tempTo = matchArr(to)
+        used(tempTo) = true
+        q += tempTo
+        qt += 1
+      }
+    }
+  }
+  -1
+}
+
+  def maxMatching(graph: Array[ArrayBuffer[Int]]): Array[(Int, Int)] = {
+    val n = graph.length
+    val matchArr = Array.fill(n)(-1)
+    val p = Array.fill(n)(-1)
+    for (i <- 0 until n) {
+      if (matchArr(i) == -1) {
+        var v = findPath(graph, matchArr, p, i)
+        // augment path, same as hopcroft karp algorithm
+        while (v != -1) {
+          val pv = p(v)
+          val ppv = matchArr(pv)
+          matchArr(v) = pv
+          matchArr(pv) = v
+          v = ppv
+        }
+      }
+    }
+
+    val matchedEdges = ArrayBuffer[(Int, Int)]()
+    for (i <- 0 until n) {
+      if (matchArr(i) != -1 && i < matchArr(i)) {
+        matchedEdges += ((i, matchArr(i)))
+      }
+    }
+    matchedEdges.toArray
+  }
+
+def readInput(inputFile: String): Array[(Int, Int)] = {
+  val edges = Source.fromFile(inputFile).getLines().map { line =>
+    val Array(a, b) = line.split(",").map(_.toInt)
+    (a, b)
+  }.toArray
+  println(s"Read input: ${edges.mkString(", ")}")
+  edges
+}
+
+
+  def writeOutput(outputFile: String, matchedEdges: Array[(Int, Int)]): Unit = {
+    val writer = new PrintWriter(outputFile)
+    matchedEdges.foreach { case (a, b) =>
+      writer.println(s"$a,$b")
+    }
+    writer.close()
+  }
+
+  def main(args: Array[String]): Unit = {
+    if (args.length != 2) {
+      println("Usage: EdmondsBlossom input_file output_file")
+      System.exit(1)
+    }
+
+    val inputFile = args(0)
+    val outputFile = args(1)
+
+    val edges = readInput(inputFile)
+    val maxMatchedEdges = maxMatching(edgesToAdjacencyList(edges))
+    writeOutput(outputFile, maxMatchedEdges)
+  }
+
+  def edgesToAdjacencyList(edges: Array[(Int, Int)]): Array[ArrayBuffer[Int]] = {
+  val maxVertex = edges.flatMap(e => Seq(e._1, e._2)).max
+  val adjacencyList = Array.fill(maxVertex + 1)(new ArrayBuffer[Int]())
+  edges.foreach { case (a, b) =>
+    adjacencyList(a) += b
+    adjacencyList(b) += a
+  }
+  println(s"Adjacency List: ${adjacencyList.zipWithIndex.map { case (lst, idx) => s"$idx -> ${lst.mkString(", ")}" }.mkString(", ")}")
+  adjacencyList
+}
 
