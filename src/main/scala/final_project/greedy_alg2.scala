@@ -1,52 +1,52 @@
 package final_project
 
 import scala.io.Source
+import scala.util.Random
 import java.io.{File, PrintWriter}
 
-object greedy_alg2 {
+object greedy_algorithm {
   def main(args: Array[String]): Unit = {
-    val filename = "C:\\Users\\Peter\\OneDrive\\Documents\\Data-Processing-Final-Project\\data\\soc-LiveJournal1.csv"
-    val outputFilename = "C:\\Users\\Peter\\OneDrive\\Documents\\Data-Processing-Final-Project\\output\\soc-LiveJournal1_matching.csv"
-    val graph = loadGraphFromFile(filename)
+    val filename = "input/file/here"
+    val outputFilename = "output/file/here"
+    val samplingRate = 1 // we do not sample anymore
 
-    // Start time
     val startTime = System.nanoTime()
 
-    val matching = findMaximalMatching(graph)
+    val matching = findMaximalMatching(filename, samplingRate)
 
-    // End time and calculate duration
     val endTime = System.nanoTime()
-    val duration = (endTime - startTime) / 1e9d // Convert to seconds
+    val duration = (endTime - startTime) / 1e9d
     println(s"Algorithm runtime: $duration seconds")
 
     println("Saving Matching to csv")
     saveMatchingToFile(matching, outputFilename)
   }
 
-  // Function to load graph from a CSV file
-  def loadGraphFromFile(filename: String): Array[(Int, Int)] = {
-    val bufferedSource = Source.fromFile(filename)
-    val edges = bufferedSource.getLines().map { line =>
-      val parts = line.split(",").map(_.trim.toInt)
-      (parts(0), parts(1))
-    }.toArray
-    bufferedSource.close()
-    edges
-  }
-
-  // Function to find a maximal matching in a graph
-  def findMaximalMatching(graph: Array[(Int, Int)]): Set[(Int, Int)] = {
+  def findMaximalMatching(filename: String, samplingRate: Double): Set[(Int, Int)] = {
+    val random = new Random()
     var matching = Set.empty[(Int, Int)]
     var visited = Set.empty[Int]
-    for ((u, v) <- graph if !visited.contains(u) && !visited.contains(v)) {
-      matching += ((u, v))
-      visited += u
-      visited += v
+    var iteration = 0 
+
+    val bufferedSource = Source.fromFile(filename)
+    for (line <- bufferedSource.getLines()) {
+      iteration += 1 
+      if (random.nextDouble() < samplingRate) {
+        val parts = line.split(",").map(_.trim.toInt)
+        val u = parts(0)
+        val v = parts(1)
+        if (!visited.contains(u) && !visited.contains(v)) {
+          matching += ((u, v))
+          visited += u
+          visited += v
+        }
+      }
     }
+    bufferedSource.close()
+    println(s"Total iterations: $iteration") 
     matching
   }
 
-  // Function to save the matching to a CSV file
   def saveMatchingToFile(matching: Set[(Int, Int)], filename: String): Unit = {
     val writer = new PrintWriter(new File(filename))
     matching.foreach {
