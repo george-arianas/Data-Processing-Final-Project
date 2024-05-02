@@ -47,7 +47,16 @@ In summary, the Path Growing Algorithm serves as a robust starting point for gra
 
 ### Blossom Algorithm
 *Nate, put your information here, detailing the approach, complexities, and any specific implementation details or challenges you faced.*
-
+# Approach
+Graph Representation: Start by representing the problem as a graph. Each node in the graph represents an element, and each edge represents a potential match between two elements.
+Initialization: Begin with an empty matching.
+Augmenting Paths: Iteratively find augmenting paths, which are paths in the graph that start and end at unmatched vertices, alternating between matched and unmatched edges. These paths are used to increase the size of the matching.
+Blossom Contraction: When searching for augmenting paths, use blossom contraction to efficiently handle cycles in the graph. Blossom contraction merges an odd length cycle into a single vertex, reducing the size of the graph and meaning that we can employ a simpler (Hopcroft-Karp) bipartite graph matching algorithm on the now even length cycle.
+Matching Update: Update the matching based on the augmenting paths found (flip the status of matched and unmatched edges along the augmenting paths).
+Repeat: Continue the process until no more augmenting paths can be found.
+# Complexity
+Time Complexity: The time complexity of the Blossom algorithm, depending on implementation, is O(V^3) or O(V^2*E), where V is the number of vertices in the graph, and E is the number of edges. 
+Space Complexity: The space complexity depends on the data structures used to represent the graph. In our case, its O(V^2) due to the adjacency list representation and need to store the matching
 ### Greedy Algorithm with Enhancements
 
 After discussing our initial results with the professor, we opted to adopt a greedy algorithm. Our first implementation of this algorithm proved successful for the smaller datasets, particularly for `log_normal_100.csv` and `musae_ENGB_edges.csv`. This approach, straightforward in its attempt to pair unmatched vertices greedily, achieved quick and efficient matchings due to the manageable size and lower complexity of these graphs.
@@ -110,8 +119,8 @@ In summary, our enhanced greedy algorithm started with straightforward implement
 In this project, we employed multiple algorithms to address graph matching challenges across various datasets. Here's how they stacked up against each other:
 
 - **Path Growing vs. Greedy Algorithm**: For smaller datasets like `log_normal_100.csv`, both algorithms performed efficiently. However, as dataset size increased, the Greedy algorithm, enhanced with streaming, proved more scalable than the Path Growing approach.
-- **Blossom Algorithm**: *Details to be added by Nathan*.
-
+- **Blossom Algorithm**: 
+This is the least scalable algorithm of the 3, running in O(∣E∣∣V∣^2) time. The implementation is also much more difficult. However, if the graph isn't too big, it will return an exact maximum matching correctly, so we wouldn't have to worry about suboptimal solutions. 
 
 ## System Performance Summary
 - **CPU Load and Usage**: Load Average: 1.99 (1 min), 3.06 (5 min), 5.08 (15 min); CPU Utilization: 9.52% user, 5.5% sys
@@ -139,7 +148,7 @@ Our exploration into graph matching algorithms revealed several avenues for futu
 - **Algorithm Optimization**: Further tuning of the greedy and path growing algorithms could enhance their efficiency and scalability.
 - **Hybrid Approaches**: Combining elements of different algorithms could yield better performance across diverse dataset characteristics.
 - **Real-World Applications**: Applying our findings to real-world datasets in social networking or bioinformatics could validate their practical utility and reveal new challenges.
-- **Augmenting Path Algorithm**: In response to feedback from our professor, there's an opportunity to explore augmenting path algorithms, which can potentially address limitations observed in our current streaming approach. For example, consider a test case involving edges {2,3}, {1,2}, {3,4}. While our current streaming method might select edges like {2,3}, resulting in a suboptimal matching of size 1, an augmenting path approach could intelligently reassess and select {1,2}, {3,4} to achieve an optimal matching of size 2. This methodology involves dynamically adjusting the selected edges based on a broader view of available connections, thereby potentially doubling the effectiveness of the matching in specific scenarios. Implementing this could not only enhance the matching score but also provide robustness against specially crafted test cases designed to exploit the weaknesses of simpler greedy algorithms.
+- **Issues with Streaming Approach, try Blossom Algorithm**: Our current streaming approach leads can lead to suboptimal solutions in certain cases (thank you Professor Su for pointing this out). For example, consider a test case involving edges {2,3}, {1,2}, {3,4}. Our current method might would only make a suboptimal matching of size 1, where the optimal matching clearly has length 2. A way we could circumvent this drawback is by changing from a streaming algorithm to an algorithm like the Blossom Algorithm we considered using. With a Blossom Algorithm, we would generate better quality matches, but the tradeoff is in time complexity, where we would have to pay a steep price, as the algorithm runs in O(|E||V^2|) time. However, if we use the same Blossom Algorithm while only considering paths of length 3 (so it wouldn't actually be a blossom algorithm at all since it wouldn't find blossoms, but it could still be used as such regardless), this would run very fast, not have issues with cases like the streaming algorithm, but like the streaming algorithm, generates a worse matching than the full Blossom algorithm would.
 
 ## Submission Details
 This project was submitted via GitHub. The complete codebase, including the algorithm implementation and output files, can be found at the repository link provided in the Canvas assignment submission. The output files were also validated using the provided verifier to ensure correctness of the matchings.
