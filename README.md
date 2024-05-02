@@ -55,11 +55,13 @@ In summary, the Path Growing Algorithm serves as a robust starting point for gra
 3. **Augmenting Paths**: Iteratively find augmenting paths, which are paths in the graph that start and end at unmatched vertices, alternating between matched and unmatched edges. These paths are used to increase the size of the matching.
 
 4. **Blossom Contraction**: When searching for augmenting paths, use blossom contraction to efficiently handle cycles in the graph. Blossom contraction merges an odd length cycle into a single vertex, reducing the size of the graph and meaning that we can employ a simpler (Hopcroft-Karp) bipartite graph matching algorithm on the now even length cycle.
-Matching Update: Update the matching based on the augmenting paths found (flip the status of matched and unmatched edges along the augmenting paths).
-Repeat: Continue the process until no more augmenting paths can be found.
+
+5. **Matching Update**: Update the matching based on the augmenting paths found (flip the status of matched and unmatched edges along the augmenting paths).
+   
+6. **Repeat**: Continue the process until no more augmenting paths can be found.
 #### Complexity
 Time Complexity: The time complexity of the Blossom algorithm, depending on implementation, is O(V^3) or O(V^2*E), where V is the number of vertices in the graph, and E is the number of edges. 
-Space Complexity: The space complexity depends on the data structures used to represent the graph. In our case, its O(V^2) due to the adjacency list representation and need to store the matching
+<br> Space Complexity: The space complexity depends on the data structures used to represent the graph. In our case, its O(V^2) due to the adjacency list representation and need to store the matching
 ### Greedy Algorithm with Enhancements
 
 After discussing our initial results with the professor, we opted to adopt a greedy algorithm. Our first implementation of this algorithm proved successful for the smaller datasets, particularly for `log_normal_100.csv` and `musae_ENGB_edges.csv`. This approach, straightforward in its attempt to pair unmatched vertices greedily, achieved quick and efficient matchings due to the manageable size and lower complexity of these graphs.
