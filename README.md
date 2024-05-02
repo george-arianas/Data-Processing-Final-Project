@@ -136,7 +136,7 @@ Putting these two facts together, we get the following inequalities
 ∑ e∈M∗  we ≥ ∑ e∈∈M∗ wf(e) ≥ ∑ f∈∈M 2wf 
 
 proving the theorem. 
-*taken from https://www.cs.cornell.edu/courses/cs6820/2014fa/matchingNotes.pdf
+<br>*taken from https://www.cs.cornell.edu/courses/cs6820/2014fa/matchingNotes.pdf
 
 
 #### Summary
