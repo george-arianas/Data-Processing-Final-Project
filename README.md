@@ -48,10 +48,13 @@ In summary, the Path Growing Algorithm serves as a robust starting point for gra
 ### Blossom Algorithm
 
 #### Approach
-Graph Representation: Start by representing the problem as a graph. Each node in the graph represents an element, and each edge represents a potential match between two elements.
-1. **Initialization**: Begin with an empty matching.
-2. **Augmenting Paths**: Iteratively find augmenting paths, which are paths in the graph that start and end at unmatched vertices, alternating between matched and unmatched edges. These paths are used to increase the size of the matching.
-3. **Blossom Contraction**: When searching for augmenting paths, use blossom contraction to efficiently handle cycles in the graph. Blossom contraction merges an odd length cycle into a single vertex, reducing the size of the graph and meaning that we can employ a simpler (Hopcroft-Karp) bipartite graph matching algorithm on the now even length cycle.
+1. **Graph Representation**: Start by representing the problem as a graph. Each node in the graph represents an element, and each edge represents a potential match between two elements.
+   
+2. **Initialization**: Begin with an empty matching.
+   
+3. **Augmenting Paths**: Iteratively find augmenting paths, which are paths in the graph that start and end at unmatched vertices, alternating between matched and unmatched edges. These paths are used to increase the size of the matching.
+
+4. **Blossom Contraction**: When searching for augmenting paths, use blossom contraction to efficiently handle cycles in the graph. Blossom contraction merges an odd length cycle into a single vertex, reducing the size of the graph and meaning that we can employ a simpler (Hopcroft-Karp) bipartite graph matching algorithm on the now even length cycle.
 Matching Update: Update the matching based on the augmenting paths found (flip the status of matched and unmatched edges along the augmenting paths).
 Repeat: Continue the process until no more augmenting paths can be found.
 #### Complexity
