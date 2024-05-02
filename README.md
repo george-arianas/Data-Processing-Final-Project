@@ -45,8 +45,8 @@ While the Path Growing Algorithm is efficient for smaller or simpler graphs, we 
 In summary, the Path Growing Algorithm serves as a robust starting point for graph matching problems, particularly for smaller datasets. However, its scalability is limited in the context of very large or dense graphs, necessitating more sophisticated approaches to manage computational and memory efficiency effectively.
 
 
-### Blossom Algorithm
-*Nate, put your information here, detailing the approach, complexities, and any specific implementation details or challenges you faced.*
+#### Blossom Algorithm
+
 # Approach
 Graph Representation: Start by representing the problem as a graph. Each node in the graph represents an element, and each edge represents a potential match between two elements.
 Initialization: Begin with an empty matching.
