@@ -120,17 +120,16 @@ The theoretical efficiency of our greedy algorithm can be described in terms of 
 The time complexity of our Greedy implementation is O(m) where m is the number of edges since each edge only needs to be checked once. In weighted graphs when the edges are sorted before going through the algorithm, this can be improved to O(m log m).
 
 For a lower bound on the size of the matching:
-Theorem 1. The weight of the matching M returned by the greedy algorithm is at least half
-of the weight of any matching M∗
-.
-Proof. Let M∗
+The weight of the matching M returned by the greedy algorithm is at least half
+of the weight of any matching M∗.
+<br> Proof. Let M∗
 is a matching of maximum weight, and M be the matching returned by the
 greedy algorithm. Note that for any edge e ∈ M∗ \ M, there is a reason e didn’t get into the
 greedy matching M, a previously considered edge, lets call it f(e) that has higher weight,
 and shares an end-node with e. If there are multiple such edges, let f(e) be either of the two
 such edges.
-• Note that wf(e) ≥ we as we add edges in greedy order.
-• For an edge f there can be f(e) for up to at most two edges e, conflicting with edge f
+<br>• Note that wf(e) ≥ we as we add edges in greedy order.
+<br>• For an edge f there can be f(e) for up to at most two edges e, conflicting with edge f
 at the two different ends.
 Putting these two facts together, we get the following inequalities
 
