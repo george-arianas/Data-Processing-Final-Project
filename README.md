@@ -113,7 +113,32 @@ However, as we moved to even larger datasets, it became clear that sampling alon
 
 #### Theoretical Bounds and Efficiency
 
+*I think we should remove this:*
 The theoretical efficiency of our greedy algorithm can be described in terms of an efficiency factor (ε), where ε typically approaches 1 in ideal conditions but may vary depending on the dataset's complexity and density. Under the conditions of our enhanced greedy approach, we observed that the efficiency was consistently high, managing near-optimal matchings especially as we optimized our approach with streaming.
+
+*And replace with this*
+The time complexity of our Greedy implementation is O(m) where m is the number of edges since each edge only needs to be checked once. In weighted graphs when the edges are sorted before going through the algorithm, this can be improved to O(m log m).
+
+For a lower bound on the size of the matching:
+Theorem 1. The weight of the matching M returned by the greedy algorithm is at least half
+of the weight of any matching M∗
+.
+Proof. Let M∗
+is a matching of maximum weight, and M be the matching returned by the
+greedy algorithm. Note that for any edge e ∈ M∗ \ M, there is a reason e didn’t get into the
+greedy matching M, a previously considered edge, lets call it f(e) that has higher weight,
+and shares an end-node with e. If there are multiple such edges, let f(e) be either of the two
+such edges.
+• Note that wf(e) ≥ we as we add edges in greedy order.
+• For an edge f there can be f(e) for up to at most two edges e, conflicting with edge f
+at the two different ends.
+Putting these two facts together, we get the following inequalities
+
+∑ e∈M∗  we ≥ ∑ e∈∈M∗ wf(e) ≥ ∑ f∈∈M 2wf 
+
+proving the theorem. 
+*taken from https://www.cs.cornell.edu/courses/cs6820/2014fa/matchingNotes.pdf
+
 
 #### Summary
 
