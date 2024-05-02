@@ -47,7 +47,7 @@ In summary, the Path Growing Algorithm serves as a robust starting point for gra
 
 ### Blossom Algorithm
 
-# Approach
+#### Approach
 Graph Representation: Start by representing the problem as a graph. Each node in the graph represents an element, and each edge represents a potential match between two elements.
 Initialization: Begin with an empty matching.
 Augmenting Paths: Iteratively find augmenting paths, which are paths in the graph that start and end at unmatched vertices, alternating between matched and unmatched edges. These paths are used to increase the size of the matching.
