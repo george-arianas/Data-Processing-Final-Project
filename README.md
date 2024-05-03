@@ -113,10 +113,6 @@ However, as we moved to even larger datasets, it became clear that sampling alon
 
 #### Theoretical Bounds and Efficiency
 
-*I think we should remove this:*
-The theoretical efficiency of our greedy algorithm can be described in terms of an efficiency factor (ε), where ε typically approaches 1 in ideal conditions but may vary depending on the dataset's complexity and density. Under the conditions of our enhanced greedy approach, we observed that the efficiency was consistently high, managing near-optimal matchings especially as we optimized our approach with streaming.
-
-*And replace with this*
 The time complexity of our Greedy implementation is O(m) where m is the number of edges since each edge only needs to be checked once. In weighted graphs when the edges are sorted before going through the algorithm, this can be improved to O(m log m).
 
 For a lower bound on the size of the matching:
